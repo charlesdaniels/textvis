@@ -63,6 +63,7 @@ for (par of paragraphs) {
         nodes.push({
             id: `${par.index},${sent.index}`,
             label: `(${sent.index}) ${sent.words}`,
+            sentno: sent.index,
             level: 2,
             align: 700,
         })
@@ -153,7 +154,16 @@ function alignForce(alpha) {
     for (node of nodes) {
         if (node.align == null) { continue }
 
-        node.vx += (node.align - node.x) * 0.2 * alpha;
+        node.vx += (node.align - node.x) * 0.5 * alpha;
+    }
+}
+
+function sentenceOrderForce(alpha) {
+    /* try to align each node to a specific x */
+    for (node of nodes) {
+        if (node.sentno == null) { continue }
+
+        node.vy += 5 * node.sentno * alpha;
     }
 }
 
@@ -175,6 +185,7 @@ var simulation = d3
   .force('charge', d3.forceManyBody().strength(-120))
   .force('center', d3.forceCenter(width / 2, height / 2))
   .force("align", alignForce)
+  .force("sentence", sentenceOrderForce)
 
 var dragDrop = d3.drag().on('start', function (node) {
   node.fx = node.x
