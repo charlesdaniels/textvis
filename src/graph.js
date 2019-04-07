@@ -1,52 +1,101 @@
-// var nodes = [
-//   { id: "mammal", group: 0, label: "Mammals", level: 1 },
-//   { id: "dog"   , group: 0, label: "Dogs"   , level: 2 },
-//   { id: "cat"   , group: 0, label: "Cats"   , level: 2 },
-//   { id: "fox"   , group: 0, label: "Foxes"  , level: 2 },
-//   { id: "elk"   , group: 0, label: "Elk"    , level: 2 },
-//   { id: "insect", group: 1, label: "Insects", level: 1 },
-//   { id: "ant"   , group: 1, label: "Ants"   , level: 2 },
-//   { id: "bee"   , group: 1, label: "Bees"   , level: 2 },
-//   { id: "fish"  , group: 2, label: "Fish"   , level: 1 },
-//   { id: "carp"  , group: 2, label: "Carp"   , level: 2 },
-//   { id: "pike"  , group: 2, label: "Pikes"  , level: 2 }
-// ]
-// 
-// var links = [
-//     { target: "mammal", source: "dog" , strength: 0.7 },
-//     { target: "mammal", source: "cat" , strength: 0.7 },
-//   { target: "mammal", source: "fox" , strength: 0.7 },
-//   { target: "mammal", source: "elk" , strength: 0.7 },
-//   { target: "insect", source: "ant" , strength: 0.7 },
-//   { target: "insect", source: "bee" , strength: 0.7 },
-//   { target: "fish"  , source: "carp", strength: 0.7 },
-//   { target: "fish"  , source: "pike", strength: 0.7 },
-//   { target: "cat"   , source: "elk" , strength: 0.1 },
-//   { target: "carp"  , source: "ant" , strength: 0.1 },
-//   { target: "elk"   , source: "bee" , strength: 0.1 },
-//   { target: "dog"   , source: "cat" , strength: 0.1 },
-//   { target: "fox"   , source: "ant" , strength: 0.1 },
-//     { target: "pike"  , source: "cat" , strength: 0.1 }
-// ]
+par2sent_strength = 0.2
+par2par_strength = 0.1
+sent2sent_strength = 0.3
 
-var nodes = [
-    { id: "001", label: "Paragraph 1", level: 1 },
-    { id: "002", label: "This is the first sentence.", level: 2 },
-    { id: "003", label: "This is the second sentence.", level: 2 },
-    { id: "004", label: "This is the third sentence.", level: 2 },
-    { id: "005", label: "Paragraph 2", level: 1},
-    { id: "006", label: "Look another sentence!", level: 2},
+paragraphs = [
+    {
+        "index": 0,
+        "sentences": [
+            {"index": 0, "words": "This is the first sentence."},
+            {"index": 1, "words": "This is the second sentence."},
+        ]
+    },
+    {
+        "index": 1,
+        "sentences": [
+            {"index": 0, "words": "Another sentence!"},
+            {"index": 1, "words": "Wow, such sentence, very words."},
+        ]
+    },
+    {
+        "index": 2,
+        "sentences": [
+            {"index": 0, "words": "Yo dawg, I heard you liked words."},
+            {"index": 1, "words": "So I put some words in this sentence."},
+            {"index": 2, "words": "So you can word while you word."},
+            {"index": 3, "words": "All the test data is belong to me."},
+        ]
+    }
 ]
 
-var links = [
-    { target: "001", source: "002", strength: 0.5 },
-    { target: "001", source: "003", strength: 0.5 },
-    { target: "001", source: "004", strength: 0.5 },
-    { target: "002", source: "003", strength: 0.5 },
-    { target: "003", source: "004", strength: 0.5 },
-    { target: "001", source: "005", strength: 0.1 },
-    { target: "005", source: "006", strength: 0.5 },
+relations = [
+    {
+        "from": {"paragraph": 0, "sentence": 1},
+        "to": {"paragraph": 2, "sentence": 3},
+        "annotation": "Informative data provided by API client."
+    },
+    {
+        "from": {"paragraph": 1, "sentence": 0},
+        "to": {"paragraph": 2, "sentence": 1},
+        "annotation": "This should be a tooltip."
+    }
 ]
+
+/* build representation of text */
+nodes = []
+links = []
+prev_par = null
+for (par of paragraphs) {
+
+    /* paragraph container nodes */
+    nodes.push({
+        id: par.index,
+        label: `paragraph ${par.index}`,
+        level: 1,
+    })
+
+    prev = null;
+    for (sent of par.sentences) {
+
+        /* sentence nodes */
+        nodes.push({
+            id: `${par.index},${sent.index}`,
+            label: `(${sent.index}) sent.words`,
+            level: 2,
+        })
+
+        /* link sentence to it's paragraph container */
+        links.push({
+            source: `${par.index},${sent.index}`,
+            target: par.index,
+            strength: par2sent_strength,
+        });
+
+        /* link sentence to previous sentence */
+        if (prev !== null) {
+            links.push({
+                source: `${par.index},${sent.index}`,
+                target: `${par.index},${prev.index}`,
+                strength: sent2sent_strength,
+            })
+        }
+
+        prev = sent;
+    }
+
+    /* link paragraph to previous paragraph */
+    if (prev_par !== null){
+        links.push({
+            source: par.index,
+            target: prev_par.index,
+            strength: par2par_strength,
+        })
+    }
+
+    prev_par = par;
+}
+
+
 
 function getNeighbors(node) {
   return links.reduce(function (neighbors, link) {
