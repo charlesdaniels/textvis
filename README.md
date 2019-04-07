@@ -30,3 +30,7 @@ This project will be implemented using d3.js, and in particular
 | 04-19 | Minimum-viable-product | not started |
 | 04-26 | Polished and ready to go | not started |
 | 04-29 | Project is due | N/A |
+
+## Running
+
+`cd src && python -m http.server`
