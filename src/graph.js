@@ -62,7 +62,7 @@ for (par of paragraphs) {
         /* sentence nodes */
         nodes.push({
             id: `${par.index},${sent.index}`,
-            label: `(${sent.index}) sent.words`,
+            label: `(${sent.index}) ${sent.words}`,
             level: 2,
             align: 700,
         })
