@@ -1,6 +1,7 @@
-par2sent_strength = 0.2
-par2par_strength = 0.1
-sent2sent_strength = 0.3
+par2sent_strength = 0.3
+par2par_strength = 0.2
+sent2sent_strength = 0.4
+relation_strength = 0.0
 
 paragraphs = [
     {
@@ -52,6 +53,7 @@ for (par of paragraphs) {
         id: par.index,
         label: `paragraph ${par.index}`,
         level: 1,
+        align: 100,
     })
 
     prev = null;
@@ -62,6 +64,7 @@ for (par of paragraphs) {
             id: `${par.index},${sent.index}`,
             label: `(${sent.index}) sent.words`,
             level: 2,
+            align: 700,
         })
 
         /* link sentence to it's paragraph container */
@@ -69,6 +72,7 @@ for (par of paragraphs) {
             source: `${par.index},${sent.index}`,
             target: par.index,
             strength: par2sent_strength,
+            annotation: "structural",
         });
 
         /* link sentence to previous sentence */
@@ -77,6 +81,7 @@ for (par of paragraphs) {
                 source: `${par.index},${sent.index}`,
                 target: `${par.index},${prev.index}`,
                 strength: sent2sent_strength,
+                annotation: "structural",
             })
         }
 
@@ -89,12 +94,22 @@ for (par of paragraphs) {
             source: par.index,
             target: prev_par.index,
             strength: par2par_strength,
+            annotation: "structural",
         })
     }
 
     prev_par = par;
 }
 
+/* build up representation of relations */
+for (relation of relations) {
+    links.push({
+        source: `${relation.from.paragraph},${relation.from.sentence}`,
+        target: `${relation.to.paragraph},${relation.to.sentence}`,
+        annotation: relation.annotation,
+        strength: relation_strength,
+    })
+}
 
 
 function getNeighbors(node) {
@@ -125,11 +140,21 @@ function getNodeColor(node, neighbors) {
 
 
 function getLinkColor(node, link) {
-  return isNeighborLink(node, link) ? 'green' : '#E5E5E5'
+  // return isNeighborLink(node, link) ? 'green' : link.stroke;
+
 }
 
 function getTextColor(node, neighbors) {
   return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'green' : 'black'
+}
+
+function alignForce(alpha) {
+    /* try to align each node to a specific x */
+    for (node of nodes) {
+        if (node.align == null) { continue }
+
+        node.vx += (node.align - node.x) * 0.2 * alpha;
+    }
 }
 
 var width = window.innerWidth
@@ -149,6 +174,7 @@ var simulation = d3
   .force('link', linkForce)
   .force('charge', d3.forceManyBody().strength(-120))
   .force('center', d3.forceCenter(width / 2, height / 2))
+  .force("align", alignForce)
 
 var dragDrop = d3.drag().on('start', function (node) {
   node.fx = node.x
@@ -190,7 +216,7 @@ var nodeElements = svg.append("g")
     .attr("r", 10)
     .attr("fill", getNodeColor)
     .call(dragDrop)
-    .on('click', selectNode)
+    // .on('click', selectNode)
 
 var textElements = svg.append("g")
   .attr("class", "texts")
@@ -214,6 +240,15 @@ simulation.nodes(nodes).on('tick', () => {
     .attr('y1', function (link) { return link.source.y })
     .attr('x2', function (link) { return link.target.x })
     .attr('y2', function (link) { return link.target.y })
+
+    linkElements.attr('stroke', function (link) {
+        if (link.annotation == "structural") {
+            return "#E5E5E5"
+        } else {
+            return "black"
+        }
+    });
+
 })
 
 simulation.force("link").links(links)
