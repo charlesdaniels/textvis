@@ -50,34 +50,42 @@ relations = [{"annotation": "TODO", "from": {"paragraph": 0, "sentence": 0}, "to
 
 var svg = d3.select('svg')
 
-ypos = 100
+xpos = 300;
+ypos = 100;
+textheight = 20;
 
 var pos = {}
 
+annotated_sents = [];
+
 for (par of paragraphs) {
-    pos[par.index] = {}
     for (sent of par.sentences) {
         var elem = svg.append('text')
-            .attr("x", 100)
+            .attr("x", xpos)
             .attr("y", ypos)
             .attr("fill", "black")
             .text(sent.words);
         console.log;
-        pos[par.index][sent.index] = [100 + elem.node().getComputedTextLength(), ypos];
-        ypos += 20;
+        pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
+        ypos += textheight;
     }
-    ypos += 20;
+    ypos += textheight;
 }
 
 function drawarc(fromx, fromy, tox, toy) {
-    midx = Math.max(fromx, tox) + 100;
+    midx = Math.max(fromx, tox) - xpos * 0.8;
     midy = (fromy + toy) / 2;
     return `M ${fromx} ${fromy} Q ${midx} ${midy}, ${tox} ${toy}`;
 }
 
-for (r of relations) {
+annotated_relations = []
+
+/* The actual relation objects are annotated with an elem field so they can
+ * later be retrieved if needed. We use the old style for loop syntax since
+ * the new style interacts strangely with scoping in undesirable ways. */
+for (var r of relations) {
     if ((r.from.paragraph == r.to.paragraph) && (r.from.sentence == r.to.sentence)) { continue; }
-    svg.append('path')
+    var the_elem = svg.append('path')
         .attr("d", drawarc(
             pos[r.from.paragraph][r.from.sentence][0],
             pos[r.from.paragraph][r.from.sentence][1],
@@ -86,4 +94,6 @@ for (r of relations) {
         .style("stroke", "black")
         .style("fill", "none")
         .style("stroke-width", "1");
+    r.elem = the_elem;
+    annotated_relations.push(r);
 }
