@@ -9,3 +9,12 @@ function downloadObjectAsJson(exportObj, exportName){
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
 }
+
+function removeAllChildNodes(node_id) {
+    // remove child nodes of a DOM element, but not that element
+    let myNode = d3.select(node_id).node();
+    console.log(myNode);
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.firstChild);
+    }
+}

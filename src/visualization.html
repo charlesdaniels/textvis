@@ -13,12 +13,42 @@
     <li><a href="./demo2.html">Example 2</a></li>
 </ul>
 
+<div style: 'text-align: center'>
+    <input type="file" id="file_upload" onchange="handle_file_upload(this.files)">
+    <button onclick="handle_button()">Clear</button>
+</div>
+
 <div id="graph_container">
 </div>
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./textvis.js"></script>
+<script src="./textvis_util.js"></script>
 
 <script>
-    instantiate_vis('#graph_container', paragraphs, relations);
+    function handle_button() {
+        removeAllChildNodes("#graph_container");
+        let file_upload_elem = d3.select("#file_upload").node();
+        file_upload_elem.value = "";
+        file_upload_elem.type = "text";
+        file_upload_elem.type = "file";
+    }
+
+    function handle_file_upload(files) {
+        // delete existing visualization
+        removeAllChildNodes("#graph_container");
+
+        let reader = new FileReader();
+        reader.readAsBinaryString(files[0]);
+        data = {};
+        reader.onloadend = function () {
+            try {
+                data = JSON.parse(reader.result);
+            } catch (err) {
+                alert(`encountered an error: ${err}`);
+            }
+            instantiate_vis('#graph_container', data.paragraphs, data.relations);
+        }
+
+    }
 </script>

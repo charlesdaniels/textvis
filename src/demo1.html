@@ -65,7 +65,7 @@
 
     data = {"paragraphs": paragraphs, "relations": relations};
     function handle_button_click() {
-        downloadObjectAsJson(data, "data.json");
+        downloadObjectAsJson(data, "data");
     }
 
     instantiate_vis('#graph_container', paragraphs, relations);
