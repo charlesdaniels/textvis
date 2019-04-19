@@ -32,40 +32,51 @@
         {
             "index": 0,
             "sentences": [
-                {"index": 0, "words": "This is the first sentence."},
+                {"index": 0, "words": "This is the first sentence of the first paragraph."},
                 {"index": 1, "words": "This is the second sentence."},
+                {"index": 2, "words": "Mouse over a link to see it's annotation."},
             ]
         },
         {
             "index": 1,
             "sentences": [
-                {"index": 0, "words": "Another sentence!"},
-                {"index": 1, "words": "Wow, such sentence, very words."},
-            ]
+                {"index": 0, "words": "Sentences always index from 0."},
+                {"index": 1, "words": "And the index resets every paragraph."},
+                {"index": 2, "words": "You can have as many sentences as you want."},
+                {"index": 3, "words": "Mouse over this paragraph to see an annotation."},
+            ],
+            "annotation": '<svg height="150" width="500"><ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple" /><ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime" /><ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow" /><text x=100 y=100 fill=black >This is a paragraph annotation</text></svg>',
+
         },
         {
             "index": 2,
             "sentences": [
-                {"index": 0, "words": "Yo dawg, I heard you liked words."},
-                {"index": 1, "words": "So I put some words in this sentence."},
-                {"index": 2, "words": "So you can word while you word."},
-                {"index": 3, "words": "All the test data is belong to me."},
+                {"index": 0, "words": "You can also have as many paragraphs as you want."},
             ],
-            "annotation": '<svg height="150" width="500"><ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple" /><ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime" /><ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow" /></svg>',
 
         }
     ]
 
     relations = [
         {
-            "from": {"paragraph": 0, "sentence": 1},
-            "to": {"paragraph": 2, "sentence": 3},
-            "annotation": "Informative data provided by API client."
+            "from": {"paragraph": 0, "sentence": 0},
+            "to": {"paragraph": 0, "sentence": 1},
+            "annotation": ""
         },
         {
             "from": {"paragraph": 1, "sentence": 0},
-            "to": {"paragraph": 2, "sentence": 1},
-            "annotation": "This should be a tooltip."
+            "to": {"paragraph": 1, "sentence": 2},
+            "annotation": "Links can be annotated also!"
+        },
+        {
+            "from": {"paragraph": 0, "sentence": 0},
+            "to": {"paragraph": 1, "sentence": 0},
+            "annotation": "Sentences from different paragraphs can be linked."
+        },
+        {
+            "from": {"paragraph": 2, "sentence": 0},
+            "to": {"paragraph": 1, "sentence": 0},
+            "annotation": "Links can go backwards also."
         }
     ]
 

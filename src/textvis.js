@@ -4,6 +4,14 @@ d3.selection.prototype.moveToFront = function() {
         this.parentNode.appendChild(this);
     });
 };
+d3.selection.prototype.moveToBack = function() {
+    return this.each(function() {
+        var firstChild = this.parentNode.firstChild;
+        if (firstChild) {
+            this.parentNode.insertBefore(this, firstChild);
+        }
+    });
+};
 
 function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let textheight = 20;
@@ -27,7 +35,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-raidus", "5px")
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .moveToBack();
 
     // https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
     let tooltip = container.append("div")
@@ -38,7 +47,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         .style("border", "solid")
         .style("border-width", "2px")
         .style("border-raidus", "5px")
-        .style("padding", "5px");
+        .style("padding", "5px")
+        .moveToBack();
 
     function handle_svg_download () {
         let html = svg.attr("version", 1.1)
@@ -51,15 +61,19 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     download.on("click", handle_svg_download);
 
     function show_tooltip(text) {
+        if (text == null) { return; }
+        if (text == "") { return; }
         tooltip.html(text)
             .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 300) + "px")
+            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 200) + "px")
             .style("position", "fixed")
-            .style("opacity", 1);
+            .style("opacity", 1)
+            .moveToFront();
     }
 
     function hide_tooltip() {
-        tooltip.style("opacity", 0);
+        tooltip.style("opacity", 0).moveToBack();
+
     }
 
     function show_svg_annotation(data) {
@@ -67,15 +81,14 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         if (data == "") {return;}
         annotation_container.style("opacity", 1)
             .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 300) + "px")
-            .style("position", "fixed");
+            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 100) + "px")
+            .style("position", "fixed")
+            .moveToFront();
         annotation_container.node().innerHTML = data;
-        console.log(annotation_container.node());
-        console.log(data);
     }
 
     function hide_svg_annotation() {
-        annotation_container.style("opacity", 0);
+        annotation_container.style("opacity", 0).moveToBack();
         annotation_container.innerHTML = "";
     }
 
