@@ -82,7 +82,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         if (data == "") {return;}
         annotation_container.style("opacity", 1)
             .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 100) + "px")
+            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 200) + "px")
             .style("position", "fixed")
             .moveToFront();
         annotation_container.node().innerHTML = data;
