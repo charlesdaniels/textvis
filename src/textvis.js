@@ -37,7 +37,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         .style("border-width", "2px")
         .style("border-raidus", "5px")
         .style("padding", "5px")
-        .moveToBack();
+        .style("left", "1000px");
 
     // https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
     let tooltip = container.append("div")
@@ -73,24 +73,23 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     }
 
     function hide_tooltip() {
-        tooltip.style("opacity", 0).moveToBack();
-
+        tooltip.style("opacity", 0).moveToBack().style("left", 1000);
     }
 
-    function show_svg_annotation(data) {
+    function show_svg_annotation(data, x, y) {
         if (data == null) {return;}
         if (data == "") {return;}
         annotation_container.style("opacity", 1)
-            .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 200) + "px")
+            .style("left", x + "px")
+            .style("top", y + "px")
             .style("position", "fixed")
             .moveToFront();
         annotation_container.node().innerHTML = data;
     }
 
     function hide_svg_annotation() {
-        annotation_container.style("opacity", 0).moveToBack();
-        annotation_container.innerHTML = "";
+        annotation_container.style("opacity", 0).style("left", "1000px").moveToBack();
+        annotation_container.node().innerHTML = "";
     }
 
     let link_color_normal = "#AAAAAA";
@@ -118,9 +117,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                 .attr("fill", sentence_color_normal)
                 .text(sent.words)
                 .on("mouseover", function (d) {
+                    let bounds = d3.select(this).node().getBoundingClientRect();
                     d3.select(this).text(d.text_with_pos);
                     d3.select(this).attr("fill", sentence_color_active);
-                    show_svg_annotation(d.annotation_svg);
+                    show_svg_annotation(d.annotation_svg, bounds.x + 100, bounds.y + 100);
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
@@ -204,5 +204,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         sentences[r.to.paragraph][r.to.sentence].data()[0].incoming.push(the_elem);
 
     }
+
+    hide_svg_annotation();
 
 }
