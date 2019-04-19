@@ -61,12 +61,12 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
     download.on("click", handle_svg_download);
 
-    function show_tooltip(text) {
+    function show_tooltip(text, x, y) {
         if (text == null) { return; }
         if (text == "") { return; }
         tooltip.html(text)
-            .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 200) + "px")
+            .style("left", x + "px")
+            .style("top", y + "px")
             .style("position", "fixed")
             .style("opacity", 1)
             .moveToFront();
@@ -178,7 +178,12 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
                 tooltip.attr("y", d.tooltip_y);
                 tooltip.attr("fill", "black");
-                show_tooltip(d.tooltip_text);
+                let bounds = d.to.node().getBoundingClientRect();
+                if (d.from.node().getBoundingClientRect().y > bounds.y) {
+                    bounds = d.from.node().getBoundingClientRect();
+                }
+
+                show_tooltip(d.tooltip_text, 100, bounds.y + 50);
 
             }).on("mouseout", function(d) {
                 d3.select(this).attr("stroke", link_color_normal);
