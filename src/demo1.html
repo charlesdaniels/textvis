@@ -13,7 +13,11 @@
     <li><a href="./demo2.html">Example 2</a></li>
 </ul>
 
+<div style: 'text-align: center'>
 <button id="download_json_button" onclick="handle_button_click()">Download JSON</button>
+<button id="download_svg_btn">Download SVG</button>
+</div>
+
 <div id="graph_container">
 </div>
 
@@ -65,8 +69,8 @@
 
     data = {"paragraphs": paragraphs, "relations": relations};
     function handle_button_click() {
-        downloadObjectAsJson(data, "data");
+        downloadObjectAsJson(data, "data.json");
     }
 
-    instantiate_vis('#graph_container', paragraphs, relations);
+    instantiate_vis('#graph_container', '#download_svg_btn', paragraphs, relations);
 </script>

@@ -42,8 +42,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
     function show_tooltip(text) {
         tooltip.html(text)
-            .style("left", (d3.mouse(d3.event.currentTarget)[0]-0.3*xpos) + "px")
-            .style("top", (d3.mouse(d3.event.currentTarget)[1] - 0.3*ypos) + "px")
+            .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
+            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 300) + "px")
             .style("position", "fixed")
             .style("opacity", 1);
     }
