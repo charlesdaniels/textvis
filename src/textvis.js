@@ -147,7 +147,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     }
 
     function drawarc(fromx, fromy, tox, toy) {
-        midx = Math.max(fromx, tox) - xpos * 0.8;
+        midx = Math.max(fromx, tox) - 0.5 * xpos - 0.35 * Math.abs(fromy - toy);
         midy = (fromy + toy) / 2;
         return `M ${fromx} ${fromy} Q ${midx} ${midy}, ${tox} ${toy}`;
     }
