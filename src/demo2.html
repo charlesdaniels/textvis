@@ -12,8 +12,10 @@
     <li><a href="./demo1.html">Example 1</a></li>
     <li><a class="active" href="">Example 2</a></li>
 </ul>
-<div>
-TODO: put stuff here
+
+<div style: 'text-align: center'>
+<button id="download_json_button" onclick="handle_button_click()">Download JSON</button>
+<button id="download_svg_btn">Download SVG</button>
 </div>
 
 <div id="graph_container">
@@ -21,46 +23,98 @@ TODO: put stuff here
 
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./textvis.js"></script>
+<script src="./textvis_util.js"></script>
 
 <script>
+
+
     paragraphs = [
         {
             "index": 0,
             "sentences": [
-                {"index": 0, "words": "This is the first sentence."},
-                {"index": 1, "words": "This is the second sentence."},
+                {"index": 0, "words": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."},
+                {"index": 1, "words": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."},
+                {"index": 2, "words": "Duis aute irure dolor in reprehenderit in voluptate velit esse."},
+                {"index": 3, "words": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."},
             ]
         },
         {
             "index": 1,
             "sentences": [
-                {"index": 0, "words": "Another sentence!"},
-                {"index": 1, "words": "Wow, such sentence, very words."},
+                {"index": 0, "words": "Sed ut perspiciatis unde omnis iste."},
+                {"index": 1, "words": "Nemo enim ipsam voluptatem quia voluptas sit aspernatur."},
+                {"index": 2, "words": "Neque porro quisquam est, qui dolorem ipsum."},
+                {"index": 3, "words": "Ut enim ad minima veniam, quis nostrum exercitationem ullam."},
             ]
         },
         {
             "index": 2,
             "sentences": [
-                {"index": 0, "words": "Yo dawg, I heard you liked words."},
-                {"index": 1, "words": "So I put some words in this sentence."},
-                {"index": 2, "words": "So you can word while you word."},
-                {"index": 3, "words": "All the test data is belong to me."},
-            ]
+                    {"index": 0, "words": "Nunc elit neque, auctor a lacinia in, accumsan sed lacus."},
+                    {"index": 1, "words": "Pellentesque sit amet purus est."},
+                    {"index": 2, "words": "Aliquam eget purus vitae odio consectetur iaculis."},
+                    {"index": 3, "words": "Cras congue leo a sem varius, non mollis dolor ultricies."},
+                    {"index": 4, "words": "Proin dignissim nec risus eu vulputate."},
+                    {"index": 5, "words": "Maecenas vulputate est eu nisl gravida, id tempus nibh auctor."},
+                    {"index": 6, "words": "Praesent auctor laoreet turpis sed euismod."},
+                    {"index": 7, "words": "Curabitur ac pharetra quam, eu fringilla turpis."},
+                    {"index": 8, "words": "Integer a tristique lacus."},
+                    {"index": 9, "words": "Vestibulum tellus nibh, consequat id interdum eu, mollis ut dolor."},
+                    {"index": 10, "words": "Mauris porta massa ornare nisl fermentum vulputate."},
+                    {"index": 11, "words": "Fusce vel commodo magna."},
+                    {"index": 12, "words": "Sed dignissim, massa quis viverra commodo, leo magna tempus enim, viverra pretium dui dolor eu tortor."},
+                    {"index": 13, "words": "Aliquam maximus condimentum libero."},
+                    {"index": 14, "words": "Suspendisse dictum sem quis massa venenatis, eget convallis enim tincidunt."},
+            ],
         }
     ]
+
+
 
     relations = [
         {
-            "from": {"paragraph": 0, "sentence": 1},
-            "to": {"paragraph": 2, "sentence": 3},
-            "annotation": "Informative data provided by API client."
+            "from": {"paragraph": 0, "sentence": 0},
+            "to": {"paragraph": 0, "sentence": 1},
+            "annotation": ""
         },
         {
             "from": {"paragraph": 1, "sentence": 0},
-            "to": {"paragraph": 2, "sentence": 1},
-            "annotation": "This should be a tooltip."
-        }
+            "to": {"paragraph": 1, "sentence": 2},
+        },
+        {
+            "from": {"paragraph": 0, "sentence": 0},
+            "to": {"paragraph": 1, "sentence": 0},
+        },
+        {
+            "from": {"paragraph": 2, "sentence": 0},
+            "to": {"paragraph": 1, "sentence": 0},
+        },
+        {
+            "from": {"paragraph": 2, "sentence": 7},
+            "to": {"paragraph": 0, "sentence": 1},
+        },
+        {
+            "from": {"paragraph": 2, "sentence": 5},
+            "to": {"paragraph": 0, "sentence": 1},
+        },
+        {
+            "from": {"paragraph": 2, "sentence": 0},
+            "to": {"paragraph": 0, "sentence": 1},
+        },
+        {
+            "from": {"paragraph": 1, "sentence": 0},
+            "to": {"paragraph": 1, "sentence": 2},
+        },
+        {
+            "from": {"paragraph": 0, "sentence": 1},
+            "to": {"paragraph": 1, "sentence": 2},
+        },
     ]
 
-    instantiate_vis('#graph_container', paragraphs, relations);
+    data = {"paragraphs": paragraphs, "relations": relations};
+    function handle_button_click() {
+        downloadObjectAsJson(data, "data.json");
+    }
+
+    instantiate_vis('#graph_container', '#download_svg_btn', paragraphs, relations);
 </script>
