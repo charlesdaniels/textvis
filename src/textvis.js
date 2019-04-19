@@ -19,6 +19,16 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         .attr("width", 1000)
         .attr("height", 4000);
 
+    let annotation_container = container.append('div')
+        .attr("id", "annotation_container")
+        .style("opacity", 0)
+        .style("class", "tooltop")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-raidus", "5px")
+        .style("padding", "5px");
+
     // https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
     let tooltip = container.append("div")
         .attr("id", "tooltip_container")
@@ -52,6 +62,23 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         tooltip.style("opacity", 0);
     }
 
+    function show_svg_annotation(data) {
+        if (data == null) {return;}
+        if (data == "") {return;}
+        annotation_container.style("opacity", 1)
+            .style("left", (d3.mouse(d3.event.currentTarget)[0] - 100) + "px")
+            .style("top", (d3.mouse(d3.event.currentTarget)[1] + 300) + "px")
+            .style("position", "fixed");
+        annotation_container.node().innerHTML = data;
+        console.log(annotation_container.node());
+        console.log(data);
+    }
+
+    function hide_svg_annotation() {
+        annotation_container.style("opacity", 0);
+        annotation_container.innerHTML = "";
+    }
+
     let link_color_normal = "#AAAAAA";
     let link_color_active = "#CC3333";
     let sentence_color_normal = "#111111";
@@ -66,6 +93,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     for (par of paragraphs) {
         pos[par.index] = {};
         sentences[par.index] = {};
+        let annotation_svg_str = "";
+        if (par.annotation != null) {
+            annotation_svg_str = par.annotation;
+        }
         for (sent of par.sentences) {
             let elem = svg.append('text')
                 .attr("x", xpos)
@@ -75,12 +106,14 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                 .on("mouseover", function (d) {
                     d3.select(this).text(d.text_with_pos);
                     d3.select(this).attr("fill", sentence_color_active);
+                    show_svg_annotation(d.annotation_svg);
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
                 }).on("mouseout", function(d) {
                     d3.select(this).text(d.text);
                     d3.select(this).attr("fill", sentence_color_normal);
+                    hide_svg_annotation();
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_normal);
                     }
@@ -90,8 +123,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                 "outgoing": [],
                 "text": sent.words,
                 "text_with_pos": `(${par.index},${sent.index}) ${sent.words}`,
+                "annotation_svg": annotation_svg_str,
             }]);
-            console.log;
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
             sentences[par.index][sent.index] = elem;
             ypos += textheight;
