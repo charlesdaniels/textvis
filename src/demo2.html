@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <meta charset="UTF-8">
+    <title>TextVis Example 2</title>
+    <link href="textvis.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<ul class="topnav">
+    <li><a href="./index.html">Welcome</a></li>
+    <li><a href="./visualization.html">Visualization</a></li>
+    <li><a href="./demo1.html">Example 1</a></li>
+    <li><a class="active" href="">Example 2</a></li>
+</ul>
+<div>
+TODO: put stuff here
+</div>
+
+<div id="graph_container">
+</div>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="./textvis.js"></script>
+
+<script>
+    paragraphs = [
+        {
+            "index": 0,
+            "sentences": [
+                {"index": 0, "words": "This is the first sentence."},
+                {"index": 1, "words": "This is the second sentence."},
+            ]
+        },
+        {
+            "index": 1,
+            "sentences": [
+                {"index": 0, "words": "Another sentence!"},
+                {"index": 1, "words": "Wow, such sentence, very words."},
+            ]
+        },
+        {
+            "index": 2,
+            "sentences": [
+                {"index": 0, "words": "Yo dawg, I heard you liked words."},
+                {"index": 1, "words": "So I put some words in this sentence."},
+                {"index": 2, "words": "So you can word while you word."},
+                {"index": 3, "words": "All the test data is belong to me."},
+            ]
+        }
+    ]
+
+    relations = [
+        {
+            "from": {"paragraph": 0, "sentence": 1},
+            "to": {"paragraph": 2, "sentence": 3},
+            "annotation": "Informative data provided by API client."
+        },
+        {
+            "from": {"paragraph": 1, "sentence": 0},
+            "to": {"paragraph": 2, "sentence": 1},
+            "annotation": "This should be a tooltip."
+        }
+    ]
+
+    instantiate_vis('#graph_container', paragraphs, relations);
+</script>

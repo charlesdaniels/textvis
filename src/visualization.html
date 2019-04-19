@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <meta charset="UTF-8">
+    <title>TextVis</title>
+    <link href="textvis.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<ul class="topnav">
+    <li><a href="./index.html">Welcome</a></li>
+    <li><a class="active" href="">Visualization</a></li>
+    <li><a href="./demo1.html">Example 1</a></li>
+    <li><a href="./demo2.html">Example 2</a></li>
+</ul>
+
+<div id="graph_container">
+</div>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="./textvis.js"></script>
+
+<script>
+    instantiate_vis('#graph_container', paragraphs, relations);
+</script>
