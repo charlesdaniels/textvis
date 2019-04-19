@@ -23,6 +23,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     // width and height are mostly bogus, but they seem to fix some wierd
     // glitches with mouseover under Firefox
     let svg = container.append('div').append('svg')
+        .attr("id", "textvis_svg")
         .style("overflow", "visible")
         .attr("width", 1000)
         .attr("height", 4000);

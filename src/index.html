@@ -5,6 +5,11 @@
         <title>TextVis Dashboard</title>
         <link href="textvis.css" rel="stylesheet" type="text/css" media="all">
     </head>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./textvis.js"></script>
+    <script src="./textvis_util.js"></script>
+
     <body>
         <ul class="topnav">
             <li><a class="active" href="">Welcome</a></li>
@@ -12,6 +17,12 @@
             <li><a href="./demo1.html">Example 1</a></li>
             <li><a href="./demo2.html">Example 2</a></li>
         </ul>
+
+        <button disabled id="temp_button">Loading...</button>
+
+        <div id="logo_container"/>
+
+        </div>
 
         <div>
 
@@ -145,5 +156,39 @@
         </footer>
 
     </body>
+
+    <script>
+    paragraphs = [
+        {
+            "index": 0,
+            "sentences": [
+                {"index": 0, "words": "textvis"},
+                {"index": 1, "words": ".js"},
+            ]
+        },
+    ]
+
+    relations = [
+        {
+            "from": {"paragraph": 0, "sentence": 0},
+            "to": {"paragraph": 0, "sentence": 1},
+        }
+    ]
+
+    data = {"paragraphs": paragraphs, "relations": relations};
+    function handle_button_click() {
+        downloadObjectAsJson(data, "data.json");
+    }
+
+    instantiate_vis('#logo_container', '#temp_button', paragraphs, relations);
+
+    d3.select("#temp_button").node().remove()
+    d3.select("#textvis_svg")
+        .attr("overflow", "hidden")
+        .attr("width", 200)
+        .attr("height", 150);
+
+    </script>
+
 </html>
 

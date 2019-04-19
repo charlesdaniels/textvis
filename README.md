@@ -1,5 +1,7 @@
 # textvis
 
+![](assets/logo.png)
+
 Text Visualization project for CSCE567
 
 ## Objective
@@ -13,7 +15,7 @@ related to another specific sentence in another paragraph by some other metric.
 
 ## Approach
 
-This project will be implemented using d3.js, and in particular
+This project is implemented using d3.js, and in particular
 [d3-force](https://github.com/d3/d3-force).
 
 ## Resources
@@ -22,15 +24,8 @@ This project will be implemented using d3.js, and in particular
 * [d3.js API reference](https://github.com/d3/d3/blob/master/API.md)
 * [Interactive & Dynamic Force-Directed Graphs with D3](https://medium.com/ninjaconcept/interactive-dynamic-force-directed-graphs-with-d3-da720c6d7811)
 
-## Timeline
-
-| Date  | Description | Status |
-|-------|-------------|--------|
-| 04-12 | Proof-of-concept | WiP |
-| 04-19 | Minimum-viable-product | not started |
-| 04-26 | Polished and ready to go | not started |
-| 04-29 | Project is due | N/A |
-
 ## Running
 
 `cd src && python -m http.server`
+
+[check out a live demo](http://cdaniels.net/app/textvis/)
