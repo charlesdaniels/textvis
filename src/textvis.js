@@ -73,11 +73,13 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                 .attr("fill", sentence_color_normal)
                 .text(sent.words)
                 .on("mouseover", function (d) {
+                    d3.select(this).text(d.text_with_pos);
                     d3.select(this).attr("fill", sentence_color_active);
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
                 }).on("mouseout", function(d) {
+                    d3.select(this).text(d.text);
                     d3.select(this).attr("fill", sentence_color_normal);
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_normal);
@@ -86,6 +88,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
             elem.data([{
                 "incoming": [],
                 "outgoing": [],
+                "text": sent.words,
+                "text_with_pos": `(${par.index},${sent.index}) ${sent.words}`,
             }]);
             console.log;
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
@@ -122,6 +126,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
                 d.from.attr("fill", sentence_color_active);
                 d.to.attr("fill", sentence_color_active);
+                d.from.text(d.from.data()[0].text_with_pos);
+                d.to.text(d.to.data()[0].text_with_pos);
 
                 tooltip.attr("y", d.tooltip_y);
                 tooltip.attr("fill", "black");
@@ -132,6 +138,9 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
                 d.from.attr("fill", sentence_color_normal);
                 d.to.attr("fill", sentence_color_normal);
+
+                d.from.text(d.from.data()[0].text);
+                d.to.text(d.to.data()[0].text);
 
                 hide_tooltip();
 
