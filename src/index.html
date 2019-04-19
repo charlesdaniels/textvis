@@ -13,6 +13,123 @@
             <li><a href="./demo2.html">Example 2</a></li>
         </ul>
 
+        <div>
+
+            <h1>Introduction</h1>
+
+            <p>
+
+            Welcome to TextVis. TextVis is a JavaScript + d3.js library for
+            visualizing relationships between sentences of text. TextVis is
+            specially designed for reviewing the results of certain classes of
+            NLP programs, such as topic flow detection, antecedent analysis,
+            and the like. TextVis can also be used to display manually
+            annotated relationships between sentences.
+
+            </p>
+
+            <p>
+
+            TextVis takes as input a simple, easy to hand-write or generate
+            JSON format. This dashboard is designed to demonstrate how to use
+            TextVis, and also allow you to upload your own JSON files to see
+            how TextVis will display them. If you want to use TextVis as part
+            of a serious project, you should probably call it as a library from
+            your own HTML/js code.
+
+            </p>
+
+            <h1>JSON Format</h1>
+
+            <p>
+
+            Please review the two provided example pages. Both of these feature
+            example JSON code for you to download and review. The following is
+            a specification or the schema of said JSON code.
+
+            </p>
+
+            <p>
+
+            The input JSON file should contain two arrays, <b>paragraphs</b>
+            and <b>relations</b>.
+
+            </p>
+
+            <p>
+
+            The <b>paragraphs</b> array should be a list of objects which
+            must define the following members:
+
+            </p>
+
+            <ul>
+                <li><code>index</code>, The paragraph number, as an
+                    integer.</li>
+                <li><code>sentences</code>, A list of sentence objects.</li>
+            </ul>
+
+            <p>
+
+            A <b>sentence</b> object must define the following members:
+
+            </p>
+
+            <ul>
+                <li><code>index</code>, The sentence number, as an integer.
+                    This should not be unique, but rather relative to the
+                    beginning of the parent paragraph.</li>
+                <li><code>words</code>, A string containing the words of the
+                    sentence.</li>
+            </ul>
+
+            <p>
+
+            The <b>relations</b> array should be a list of relation objects,
+            which must define the following members:
+
+            </p>
+
+            <ul>
+                <li><code>from</code>, A marker object.</li>
+                <li><code>to</code>, A marker object.</li>
+                <li><code>annotation</code>, A string to be shown in a tooltip
+                    when the relation is moused over. May be left empty, but
+                    must be defined.</li>
+            </ul>
+
+            <p>
+
+            A <b>marker</b> object must define the following members:
+
+            </p>
+
+            <ul>
+                <li><code>paragraph</code>, The paragraph number of the
+                    marker.</li>
+                <li><code>sentence</code>, The sentence number of the
+                    marker.</li>
+            </ul>
+
+            <p><b>NOTE: </b> sentence and paragraph numbers are 0-indexed.
+
+            <h1>Links</h1>
+
+            <ul>
+
+                <li><a href="https://github.com/charlesdaniels/textvis/">Project Homepage</a></li>
+
+            </ul>
+
+
+        </div>
+
+        <footer>
+            <div class="footertext">
+                <hr>
+                <small>Copyright 2019 Charles Daniels, All Rights Reserved </small>
+            </div>
+        </footer>
 
     </body>
 </html>

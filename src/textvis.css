@@ -1,4 +1,10 @@
-body {margin: 0;}
+body {
+    margin: 1.5cm;
+    background-color: #f5f5f5;
+    color: #2f2f2f;
+    font-family: serif;
+    font-size: 14pt;
+}
 
 ul.topnav {
     list-style-type: none;
@@ -23,3 +29,11 @@ ul.topnav li a:hover:not(.active) {background-color: #BBBBBB;}
 ul.topnav li a.active {background-color: #CC3333;}
 
 ul.topnav li.right {float: right;}
+
+.footertext {
+    text-align: center;
+    color: #c0c0c0;
+    font-family: sans-serif;
+    font-size: 12pt;
+}
+
