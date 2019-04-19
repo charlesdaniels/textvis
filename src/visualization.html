@@ -14,8 +14,13 @@
 </ul>
 
 <div style: 'text-align: center'>
-    <input type="file" id="file_upload" onchange="handle_file_upload(this.files)">
+    <input disabled type="file" id="file_upload" onchange="handle_file_upload(this.files)">
     <button onclick="handle_button()">Clear</button>
+    <button id="download_svg_btn">Download SVG</button>
+</div>
+
+<div id="loading_container">
+Loading... 
 </div>
 
 <div id="graph_container">
@@ -47,8 +52,20 @@
             } catch (err) {
                 alert(`encountered an error: ${err}`);
             }
-            instantiate_vis('#graph_container', data.paragraphs, data.relations);
+            instantiate_vis('#graph_container', '#download_svg_btn', data.paragraphs, data.relations);
         }
 
     }
+
+    while(true) {
+        if (handle_file_upload !== undefined) {
+            console.log("scripts ready");
+            break;
+        }
+        console.log("waiting for scripts to download...");
+        sleep(100);
+    }
+
+    d3.select("#file_upload").node().disabled = false;
+    d3.select("#loading_container").node().remove();
 </script>

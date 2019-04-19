@@ -5,15 +5,19 @@ d3.selection.prototype.moveToFront = function() {
     });
 };
 
-function instantiate_vis(container_id, paragraphs, relations) {
+function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
+    let textheight = 20;
+
     let container = d3.select(container_id);
+
+    let download = d3.select(download_btn_id);
 
     // width and height are mostly bogus, but they seem to fix some wierd
     // glitches with mouseover under Firefox
-    let svg = container.append('svg')
+    let svg = container.append('div').append('svg')
         .style("overflow", "visible")
-        .attr("width", 2000)
-        .attr("height", 10000);
+        .attr("width", 1000)
+        .attr("height", 4000);
 
     // https://www.d3-graph-gallery.com/graph/interactivity_tooltip.html
     let tooltip = container.append("div")
@@ -25,6 +29,16 @@ function instantiate_vis(container_id, paragraphs, relations) {
         .style("border-width", "2px")
         .style("border-raidus", "5px")
         .style("padding", "5px");
+
+    function handle_svg_download () {
+        let html = svg.attr("version", 1.1)
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+            .node().parentNode.innerHTML;
+        let imgstr = 'data:image/svg+xml;base64,' + btoa(html);
+        downloadString(imgstr, "figure.svg");
+    }
+
+    download.on("click", handle_svg_download);
 
     function show_tooltip(text) {
         tooltip.html(text)
@@ -45,7 +59,6 @@ function instantiate_vis(container_id, paragraphs, relations) {
 
     xpos = 300;
     ypos = 100;
-    textheight = 20;
 
     let pos = {}
     let sentences = {}
