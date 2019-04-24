@@ -55,7 +55,7 @@ function get_link_heatmap_by_par(paragraphs, relations) {
     return heatmap
 }
 
-function update_minimap(container, paragraphs, relations) {
+function update_minimap(container, paragraphs, relations, parpos) {
     // call this when turning the minimap on, or if it needs to be re-rendered,
     // such as on a screen size change.
 
@@ -90,6 +90,14 @@ function update_minimap(container, paragraphs, relations) {
 
     let rect_height = minimap_height / Object.keys(heatmap).length;
 
+    let start_y = parpos[Object.keys(parpos)[0]]
+    let stop_y = parpos[Object.keys(parpos)[Object.keys(parpos).length-1]];
+
+    let current_scroll_percent = (window.pageYOffset - start_y) / (stop_y - start_y);
+
+    if (current_scroll_percent < 0) { current_scroll_percent = 0.0; }
+    if (current_scroll_percent > 1.0) { current_scroll_percent = 1.0; }
+
     let heat_scale = d3.scaleLinear()
         .domain([0, 1.0])
         .range(["#f5f5f5", "#CC3333"]);
@@ -97,14 +105,33 @@ function update_minimap(container, paragraphs, relations) {
     let count = 0;
     for (let i in heatmap) {
         let h = heatmap[i];
-        minimap_svg.append("rect")
+        let elem = minimap_svg.append("rect")
             .attr("x", 0)
             .attr("y", count * rect_height)
             .attr("width", 25)
             .attr("height", rect_height)
-            .attr("fill", heat_scale(h.intensity));
+            .attr("fill", heat_scale(h.intensity))
+            .on("click", function(d) {
+                window.scrollTo(0, d.parpos);
+            }).on("mouseover", function(d) {
+                d3.select(this).attr("stroke", "black")
+                .attr("stroke-width", 4);
+            }).on("mouseout", function(d) {
+                d3.select(this).attr("stroke", "none");
+            });
+
+        elem.data([{
+            "parpos": parpos[i]
+        }]);
         count ++;
     }
+
+    minimap_svg.append("rect")
+        .attr("x", 0)
+        .attr("y", minimap_height * current_scroll_percent)
+        .attr("width", 25)
+        .attr("height", 3)
+        .attr("fill", "black");
 
 
 }
@@ -197,6 +224,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
     let pos = {}
     let sentences = {}
+    parpos = {}
 
     for (par of paragraphs) {
         pos[par.index] = {};
@@ -205,6 +233,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         if (par.annotation != null) {
             annotation_svg_str = par.annotation;
         }
+        let got_parpos = false;
         for (sent of par.sentences) {
             let elem = svg.append('text')
                 .attr("x", xpos)
@@ -237,6 +266,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
             sentences[par.index][sent.index] = elem;
             ypos += textheight;
+            if (!got_parpos) {
+                parpos[par.index] = elem.node().getBoundingClientRect().y;
+                got_parpos = true;
+            }
         }
         ypos += textheight;
     }
@@ -307,10 +340,15 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
     hide_svg_annotation();
 
-    update_minimap(container, paragraphs, relations);
+    update_minimap(container, paragraphs, relations, parpos);
 
-    window.addEventListener('resize', function(event){
-        update_minimap(container, paragraphs, relations);
+    window.addEventListener('resize', function(event) {
+        update_minimap(container, paragraphs, relations, parpos);
     });
+
+    window.addEventListener("scroll", function(event) {
+        update_minimap(container, paragraphs, relations, parpos);
+    }); 
+
 
 }
