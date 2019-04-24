@@ -9,9 +9,9 @@
 <ul class="topnav">
     <li><a href="./index.html">Welcome</a></li>
     <li><a href="./visualization.html">Visualization</a></li>
-    <li><a class="active" href="">Example 1</a></li>
+    <li><a href="./demo1.html">Example 1</a></li>
     <li><a href="./demo2.html">Example 2</a></li>
-    <li><a href="./demo3.html">Example 3</a></li>
+    <li><a class="active" href="">Example 3</a></li>
 </ul>
 
 <div style: 'text-align: center'>
@@ -33,18 +33,18 @@
         {
             "index": 0,
             "sentences": [
-                {"index": 0, "words": "This is the first sentence of the first paragraph."},
-                {"index": 1, "words": "This is the second sentence."},
-                {"index": 2, "words": "Mouse over a link to see it's annotation."},
+                {"index": 0, "words": "This is the first sentence of the first paragraph.", "heat": 0.4},
+                {"index": 1, "words": "This is the second sentence.", "heat": 0.2},
+                {"index": 2, "words": "Mouse over a link to see it's annotation.", "heat": 0.3},
             ]
         },
         {
             "index": 1,
             "sentences": [
-                {"index": 0, "words": "Sentences always index from 0."},
-                {"index": 1, "words": "And the index resets every paragraph."},
-                {"index": 2, "words": "You can have as many sentences as you want."},
-                {"index": 3, "words": "Mouse over this paragraph to see an annotation."},
+                {"index": 0, "words": "Sentences always index from 0.", "heat": 0.0},
+                {"index": 1, "words": "And the index resets every paragraph.", "heat": 0.2},
+                {"index": 2, "words": "You can have as many sentences as you want.", "heat": 0.5},
+                {"index": 3, "words": "Mouse over this paragraph to see an annotation.", "heat": 0.4},
             ],
             "annotation": '<svg height="150" width="500"><ellipse cx="240" cy="100" rx="220" ry="30" style="fill:purple" /><ellipse cx="220" cy="70" rx="190" ry="20" style="fill:lime" /><ellipse cx="210" cy="45" rx="170" ry="15" style="fill:yellow" /><text x=100 y=100 fill=black >This is a paragraph annotation</text></svg>',
 
@@ -52,7 +52,7 @@
         {
             "index": 2,
             "sentences": [
-                {"index": 0, "words": "You can also have as many paragraphs as you want."},
+                {"index": 0, "words": "You can also have as many paragraphs as you want.", "heat": 0.1},
             ],
 
         }
