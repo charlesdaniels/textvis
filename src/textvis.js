@@ -13,6 +13,102 @@ d3.selection.prototype.moveToBack = function() {
     });
 };
 
+function get_link_heatmap_by_par(paragraphs, relations) {
+    // return an object associating paragraph indices with # of links and
+    // link intensity as a % (i.e. the paragraph with the most links of any
+    // in the document has an intensity of 1.0).
+    //
+    // We only consider incoming links.
+
+    let heatmap = {}
+
+    let min_links = 999999;
+    let max_links = 0;
+
+    for (let par of paragraphs) {
+        heatmap[par.index] = {"links": 0, "intensity": 0};
+    }
+
+    for (let rel of relations) {
+        heatmap[rel.to.paragraph].links ++;
+    }
+
+    for (let i in heatmap) {
+        let h = heatmap[i];
+        if (h.links < min_links) {
+            min_links = h.links;
+        }
+
+        if (h.links > max_links) {
+            max_links = h.links;
+        }
+    }
+
+    // avoid div by 0
+    if (max_links == 0) { max_links ++; }
+
+    for (let i in heatmap) {
+        let h = heatmap[i];
+        h.intensity = (h.links - min_links) / (max_links - min_links);
+    }
+
+    return heatmap
+}
+
+function update_minimap(container, paragraphs, relations) {
+    // call this when turning the minimap on, or if it needs to be re-rendered,
+    // such as on a screen size change.
+
+    console.log("updating minimap... ");
+
+    // delete the minimap if it already exists
+    try {
+        d3.select("#textvis_minimap").remove();
+    } catch (e) {
+        console.log("caught exception: ", e)
+    };
+
+    let minimap = container.append('div')
+        .attr("id", "textvis_minimap")
+        .style("position", "fixed")
+        .style("top", "150px")
+        .style("left", "5px")
+        .style("border-radius", "5px")
+        .style("border-width", "2px")
+        .style("border", "solid")
+        .style("border-color", "black")
+        .style("opacity", 0.8);
+
+    let minimap_height = window.innerHeight - 200;
+
+    let minimap_svg = minimap.append("svg")
+        .attr("width", 25)
+        .attr("height", minimap_height)
+        .attr("id", "textvis_minimap_svg");
+
+    let heatmap = get_link_heatmap_by_par(paragraphs, relations);
+
+    let rect_height = minimap_height / Object.keys(heatmap).length;
+
+    let heat_scale = d3.scaleLinear()
+        .domain([0, 1.0])
+        .range(["#f5f5f5", "#CC3333"]);
+
+    let count = 0;
+    for (let i in heatmap) {
+        let h = heatmap[i];
+        minimap_svg.append("rect")
+            .attr("x", 0)
+            .attr("y", count * rect_height)
+            .attr("width", 25)
+            .attr("height", rect_height)
+            .attr("fill", heat_scale(h.intensity));
+        count ++;
+    }
+
+
+}
+
 function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let textheight = 20;
 
@@ -31,7 +127,6 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let annotation_container = container.append('div')
         .attr("id", "annotation_container")
         .style("opacity", 0)
-        .style("class", "tooltop")
         .style("background-color", "white")
         .style("border", "solid")
         .style("border-width", "2px")
@@ -211,5 +306,11 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     }
 
     hide_svg_annotation();
+
+    update_minimap(container, paragraphs, relations);
+
+    window.addEventListener('resize', function(event){
+        update_minimap(container, paragraphs, relations);
+    });
 
 }
