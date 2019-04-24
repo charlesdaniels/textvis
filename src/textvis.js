@@ -340,15 +340,25 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
     hide_svg_annotation();
 
-    update_minimap(container, paragraphs, relations, parpos);
+    if (typeof textvis_enable_minimap == 'undefined') {
+        textvis_enable_minimap = false;
+    }
+
+    if (textvis_enable_minimap) {
+        update_minimap(container, paragraphs, relations, parpos);
+    }
 
     window.addEventListener('resize', function(event) {
-        update_minimap(container, paragraphs, relations, parpos);
+        if (textvis_enable_minimap) {
+            update_minimap(container, paragraphs, relations, parpos);
+        }
     });
 
     window.addEventListener("scroll", function(event) {
-        update_minimap(container, paragraphs, relations, parpos);
-    }); 
+        if (textvis_enable_minimap) {
+            update_minimap(container, paragraphs, relations, parpos);
+        }
+    });
 
 
 }
