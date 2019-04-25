@@ -55,18 +55,31 @@ function get_link_heatmap_by_par(paragraphs, relations) {
     return heatmap
 }
 
-function update_minimap(container, paragraphs, relations, parpos) {
-    // call this when turning the minimap on, or if it needs to be re-rendered,
-    // such as on a screen size change.
-
-    console.log("updating minimap... ");
-
+function clear_minimap() {
     // delete the minimap if it already exists
     try {
         d3.select("#textvis_minimap").remove();
     } catch (e) {
         console.log("caught exception: ", e)
     };
+}
+
+function update_minimap(container, paragraphs, relations, parpos, heatmap) {
+    // container is the div where the minimap should be placed
+    //
+    // paragraphs and relations are as for instantiate_vis
+    //
+    // parpos should map paragraph indices to their y position on the page
+    //
+    // heatmap should associate paragraph indices with objects that define an
+    // "intensity" key that specifies an intensity value in 0..1
+
+    // call this when turning the minimap on, or if it needs to be re-rendered,
+    // such as on a screen size change.
+
+    console.log("updating minimap... ");
+
+    clear_minimap();
 
     let minimap = container.append('div')
         .attr("id", "textvis_minimap")
@@ -86,7 +99,6 @@ function update_minimap(container, paragraphs, relations, parpos) {
         .attr("height", minimap_height)
         .attr("id", "textvis_minimap_svg");
 
-    let heatmap = get_link_heatmap_by_par(paragraphs, relations);
 
     let rect_height = minimap_height / Object.keys(heatmap).length;
 
@@ -345,18 +357,21 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     }
 
     if (textvis_enable_minimap) {
-        update_minimap(container, paragraphs, relations, parpos);
+        let heatmap = get_link_heatmap_by_par(paragraphs, relations);
+        update_minimap(container, paragraphs, relations, parpos, heatmap);
     }
 
     window.addEventListener('resize', function(event) {
         if (textvis_enable_minimap) {
-            update_minimap(container, paragraphs, relations, parpos);
+            let heatmap = get_link_heatmap_by_par(paragraphs, relations);
+            update_minimap(container, paragraphs, relations, parpos, heatmap);
         }
     });
 
     window.addEventListener("scroll", function(event) {
         if (textvis_enable_minimap) {
-            update_minimap(container, paragraphs, relations, parpos);
+            let heatmap = get_link_heatmap_by_par(paragraphs, relations);
+            update_minimap(container, paragraphs, relations, parpos, heatmap);
         }
     });
 
