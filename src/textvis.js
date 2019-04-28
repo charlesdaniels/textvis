@@ -97,7 +97,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let sentence_color_normal = "#111111";
     let sentence_color_active = "#CC3333";
 
-    let colorScale = d3.scaleLinear().range(["white", "#69b3a2"]).domain([0, 1]);
+    let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
 
     xpos = 300;
     ypos = 100;
@@ -128,10 +128,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                         e.attr("stroke", link_color_active);
                     }
 
-                        pixlength = d3.select(this).node().getComputedTextLength();
+                    pixlength = d3.select(this).node().getComputedTextLength();
 
     
-                    d.highlight.attr("width", pixlength);
+                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(current_heat)});
     
 
 
@@ -143,23 +143,26 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                         e.attr("stroke", link_color_normal);
                     }
 
-                                pixlength = d3.select(this).node().getComputedTextLength();
+                    pixlength = d3.select(this).node().getComputedTextLength();
 
                        
-                    d.highlight.attr("width", pixlength);
-                    
-
+                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(0)});
 
                 })
             let current_heat = 0;
+
             if (sent.heat != undefined) { current_heat = sent.heat}
+
             pixlength = elem.node().getComputedTextLength();
+
             let highlight = svg.append('rect')
                             .attr("x", xpos)
-                            .attr("y", ypos)
+                            .attr("y", ypos-10)
                             .attr("width", pixlength)
                             .attr("height", 10)
-                            .attr("fill", function(d){return colorScale(current_heat)})
+                            .attr("fill", function(d){return colorScale(0)})
+                            .moveToBack();
+
 
             elem.data([{
                 "incoming": [],
