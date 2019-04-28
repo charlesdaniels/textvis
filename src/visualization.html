@@ -4,24 +4,46 @@
     <meta charset="UTF-8">
     <title>TextVis</title>
     <link href="textvis.css" rel="stylesheet" type="text/css" media="all">
+
+    <html lang = "en">
+  <head>
+    <title>Visualization.html</title>
+    <meta charset = "UTF-8" />
+  </head>
+</html>
 </head>
 
 <ul class="topnav">
-    <li><a href="./index.html">Welcome</a></li>
-    <li><a class="active" href="">Visualization</a></li>
-    <li><a href="./demo1.html">Example 1</a></li>
-    <li><a href="./demo2.html">Example 2</a></li>
-    <li><a href="./demo3.html">Example 3</a></li>
+   <li><a href="./index.html">Welcome</a></li>
+   <li><a class="active" href="">Visualization</a></li>
+   <li><a href="./demo1.html">Example 1</a></li>
+   <li><a href="./demo2.html">Example 2</a></li>
 </ul>
 
 <div style: 'text-align: center'>
     <input disabled type="file" id="file_upload" onchange="handle_file_upload(this.files)">
     <button onclick="handle_button()">Clear</button>
     <button id="download_svg_btn">Download SVG</button>
+    <br><br>
+
+    <body>
+      <form>
+        <fieldset>
+          <legend>Culling Paragraphs</legend>
+          <p>
+            <label>Minimum # of Links per Paragraph to Keep</label>
+            <input type = "text"
+                   id = "myText"
+                   value = "0" />
+          </p>
+          <button type="button">Cull</button>
+        </fieldset>
+      </form>
+    </body>
 </div>
 
 <div id="loading_container">
-Loading... 
+Loading...
 </div>
 
 <div id="graph_container">
@@ -32,6 +54,7 @@ Loading...
 <script src="./textvis_util.js"></script>
 
 <script>
+
     function handle_button() {
         removeAllChildNodes("#graph_container");
         let file_upload_elem = d3.select("#file_upload").node();
@@ -39,7 +62,6 @@ Loading...
         file_upload_elem.type = "text";
         file_upload_elem.type = "file";
     }
-    var textvis_enable_minimap = true;
 
     function handle_file_upload(files) {
         // delete existing visualization
@@ -50,6 +72,7 @@ Loading...
         data = {};
         reader.onloadend = function () {
             try {
+                //To uplaod .txt files
                 data = JSON.parse(reader.result);
             } catch (err) {
                 alert(`encountered an error: ${err}`);
@@ -68,6 +91,10 @@ Loading...
         sleep(100);
     }
 
+    //Culling
+    //findObjectByLabel(paragraph, "sentence");
+
     d3.select("#file_upload").node().disabled = false;
     d3.select("#loading_container").node().remove();
+
 </script>
