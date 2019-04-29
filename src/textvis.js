@@ -231,6 +231,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let sentence_color_normal = "#111111";
     let sentence_color_active = "#CC3333";
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
     let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
 =======
@@ -246,6 +247,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let negativeWords = ['radical', 'consequences', 'lesson', 'danger', 'not', 'however', 'but', 'failure', 'problem', 'negative'];
 >>>>>>> Stashed changes
 
+=======
+>>>>>>> master
     xpos = 300;
     ypos = 100;
 
@@ -260,8 +263,12 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         if (par.annotation != null) {
             annotation_svg_str = par.annotation;
         }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 
+=======
+        let got_parpos = false;
+>>>>>>> master
         for (sent of par.sentences) {
 =======
         stat_sent_num = stat_sent_num + par.sentences.length()
@@ -298,14 +305,6 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
-
-                    pixlength = d3.select(this).node().getComputedTextLength();
-
-    
-                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(current_heat)});
-    
-
-
                 }).on("mouseout", function(d) {
                     d3.select(this).text(d.text);
                     d3.select(this).attr("fill", sentence_color_normal);
@@ -313,35 +312,13 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_normal);
                     }
-
-                    pixlength = d3.select(this).node().getComputedTextLength();
-
-                       
-                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(0)});
-
                 })
-            let current_heat = 0;
-
-            if (sent.heat != undefined) { current_heat = sent.heat}
-
-            pixlength = elem.node().getComputedTextLength();
-
-            let highlight = svg.append('rect')
-                            .attr("x", xpos)
-                            .attr("y", ypos-10)
-                            .attr("width", pixlength)
-                            .attr("height", 10)
-                            .attr("fill", function(d){return colorScale(0)})
-                            .moveToBack();
-
-
             elem.data([{
                 "incoming": [],
                 "outgoing": [],
                 "text": sent.words,
                 "text_with_pos": `(${par.index},${sent.index}) ${sent.words}`,
                 "annotation_svg": annotation_svg_str,
-                "highlight": highlight
             }]);
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
             sentences[par.index][sent.index] = elem;
