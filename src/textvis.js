@@ -262,8 +262,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
+
                      pixlength = d3.select(this).node().getComputedTextLength();
-                     d.highlight.attr("width", pixlength).
+
+                     d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(current_heat)})
 
                 }).on("mouseout", function(d) {
                     d3.select(this).text(d.text);
@@ -272,8 +274,11 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_normal);
                     }
+
                     pixlength = d3.select(this).node().getComputedTextLength();
-                    d.highlight.attr("width", pixlength)
+
+                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(0)})
+                
                 })
             let current_heat = 0;
 
@@ -286,7 +291,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                             .attr("y", ypos-10)
                             .attr("width", pixlength)
                             .attr("height", 10)
-                            .attr("fill", function(d){return colorScale(current_heat)})
+                            .attr("fill", function(d){return colorScale(0)})
                             .moveToBack();
             elem.data([{
                 "incoming": [],
@@ -294,6 +299,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                 "text": sent.words,
                 "text_with_pos": `(${par.index},${sent.index}) ${sent.words}`,
                 "annotation_svg": annotation_svg_str,
+                "highlight": highlight
             }]);
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
             sentences[par.index][sent.index] = elem;
