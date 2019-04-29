@@ -297,6 +297,12 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
             if (sent.heat != undefined) { current_heat = sent.heat}
 
+            for (x in parList){
+                for(y in x){
+                    //if word is a match in compare to the work in text box current_heat++ by 0.25
+                }
+            }
+
             pixlength = elem.node().getComputedTextLength();
 
             let highlight = svg.append('rect')
