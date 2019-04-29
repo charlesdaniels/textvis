@@ -231,7 +231,20 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let sentence_color_normal = "#111111";
     let sentence_color_active = "#CC3333";
 
+<<<<<<< Updated upstream
     let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
+=======
+    stat_par_num = paragraphs.length();
+    stat_sent_num = 0;
+    stat_word_num = 0;
+    stat_avglength_word = 0;
+    stat_avgsent_par = 0;
+    stat_avgword_sent = 0;
+
+    let positivity = {};
+    let positiveWords = ['should', 'important', 'may', 'best', 'would', 'deterent', 'realistic', 'postitive', 'argue', 'prevent', 'justice', 'legally'];
+    let negativeWords = ['radical', 'consequences', 'lesson', 'danger', 'not', 'however', 'but', 'failure', 'problem', 'negative'];
+>>>>>>> Stashed changes
 
     xpos = 300;
     ypos = 100;
@@ -240,15 +253,38 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let sentences = {}
     parpos = {}
 
-    for (par of paragraphs) {
+    for (let par of paragraphs) {
         pos[par.index] = {};
         sentences[par.index] = {};
         let annotation_svg_str = "";
         if (par.annotation != null) {
             annotation_svg_str = par.annotation;
         }
+<<<<<<< Updated upstream
 
         for (sent of par.sentences) {
+=======
+        stat_sent_num = stat_sent_num + par.sentences.length()
+
+
+        let got_parpos = false;
+        for (let sent of par.sentences) {
+            i = 0;
+            stat_word_num += sent.words.length();
+            for (let w of par.sentences.words) {
+                stat_avglength_word += w.length();
+                if positiveWords.includes(w){
+                    positivity(i) += 1;
+                }
+                else if negativeWords.includes(w){
+                    positivity(i) -= 1;
+                }
+
+                i+=1;
+            }
+
+
+>>>>>>> Stashed changes
             let elem = svg.append('text')
                 .attr("x", xpos)
                 .attr("y", ypos)
@@ -317,6 +353,9 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         }
         ypos += textheight;
     }
+    stat_avglength_word = stat_avglength_word / stat_word_num;
+    stat_avgsent_par = stat_sent_num / stat_par_num;
+    stat_avgword_sent = stat_word_num / stat_sent_num;
 
     function drawarc(fromx, fromy, tox, toy) {
         midx = Math.max(fromx, tox) - 0.5 * xpos - 0.35 * Math.abs(fromy - toy);
