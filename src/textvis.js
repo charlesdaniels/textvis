@@ -265,7 +265,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
                      pixlength = d3.select(this).node().getComputedTextLength();
 
-                     d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(current_heat)})
+                     d.highlight.attr("width", pixlength)
 
                 }).on("mouseout", function(d) {
                     d3.select(this).text(d.text);
@@ -277,7 +277,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
                     pixlength = d3.select(this).node().getComputedTextLength();
 
-                    d.highlight.attr("width", pixlength).attr("fill", function(d){return colorScale(0)})
+                    d.highlight.attr("width", pixlength)
                 
                 })
             let current_heat = 0;
@@ -288,10 +288,10 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
 
             let highlight = svg.append('rect')
                             .attr("x", xpos)
-                            .attr("y", ypos-10)
+                            .attr("y", ypos-15)
                             .attr("width", pixlength)
-                            .attr("height", 10)
-                            .attr("fill", function(d){return colorScale(0)})
+                            .attr("height", 16)
+                            .attr("fill", function(d){return colorScale(current_heat)})
                             .moveToBack();
             elem.data([{
                 "incoming": [],
