@@ -160,8 +160,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let svg = container.append('div').append('svg')
         .attr("id", "textvis_svg")
         .style("overflow", "visible")
-        .attr("width", 1000)
-        .attr("height", 4000);
+        .attr("width", 2000)
+        .attr("height", 5000);
 
     let annotation_container = container.append('div')
         .attr("id", "annotation_container")
@@ -226,16 +226,16 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         annotation_container.node().innerHTML = "";
     }
 
+
+    // import string
+
     let link_color_normal = "#AAAAAA";
     let link_color_active = "#CC3333";
     let sentence_color_normal = "#111111";
     let sentence_color_active = "#CC3333";
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
     let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
-=======
-    stat_par_num = paragraphs.length();
+
+    stat_par_num = paragraphs.length;
     stat_sent_num = 0;
     stat_word_num = 0;
     stat_avglength_word = 0;
@@ -245,10 +245,7 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let positivity = {};
     let positiveWords = ['should', 'important', 'may', 'best', 'would', 'deterent', 'realistic', 'postitive', 'argue', 'prevent', 'justice', 'legally'];
     let negativeWords = ['radical', 'consequences', 'lesson', 'danger', 'not', 'however', 'but', 'failure', 'problem', 'negative'];
->>>>>>> Stashed changes
 
-=======
->>>>>>> master
     xpos = 300;
     ypos = 100;
 
@@ -263,35 +260,24 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
         if (par.annotation != null) {
             annotation_svg_str = par.annotation;
         }
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-
-=======
-        let got_parpos = false;
->>>>>>> master
-        for (sent of par.sentences) {
-=======
-        stat_sent_num = stat_sent_num + par.sentences.length()
-
 
         let got_parpos = false;
         for (let sent of par.sentences) {
+            stat_sent_num += 1;
             i = 0;
-            stat_word_num += sent.words.length();
-            for (let w of par.sentences.words) {
-                stat_avglength_word += w.length();
-                if positiveWords.includes(w){
-                    positivity(i) += 1;
+            for (var w of String(par.sentences.words).split("")) {
+                stat_word_num += 1
+                stat_avglength_word += w.length;
+                if (positiveWords.includes(w)){
+                    positivity[i] += 1;
                 }
-                else if negativeWords.includes(w){
-                    positivity(i) -= 1;
+                else if (negativeWords.includes(w)){
+                    positivity[i] -= 1;
                 }
 
                 i+=1;
             }
 
-
->>>>>>> Stashed changes
             let elem = svg.append('text')
                 .attr("x", xpos)
                 .attr("y", ypos)
