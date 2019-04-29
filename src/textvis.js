@@ -239,6 +239,19 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let pos = {}
     let sentences = {}
     parpos = {}
+    sentList = []
+    parList = []
+
+    for (par of paragraphs) {
+        for (sent of par.sentences){
+            if (sent.heat != undefined){
+                sentList.append(sent.split(" "));
+                copy = sentList.copy();
+                parList.append(copy);
+                sentList.clear()
+            }
+        }
+    }
 
     for (par of paragraphs) {
         pos[par.index] = {};
