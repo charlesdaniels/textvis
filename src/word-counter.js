@@ -56,9 +56,9 @@ input.addEventListener('keyup', function() {
   // console.log(paragraphs);
 
 
-  // reading time based on 275 words/minute
+  // reading time based on 40 words/minute
   if (words) {
-    var seconds = Math.floor(words.length *  60 / 275);
+    var seconds = Math.floor(words.length *  60 / 40);
     // need to convert seconds to minutes and hours
     if (seconds > 59) {
       var minutes = Math.floor(seconds / 60);
