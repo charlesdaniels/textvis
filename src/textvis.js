@@ -246,6 +246,8 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let positiveWords = ['should', 'important', 'may', 'best', 'would', 'deterent', 'realistic', 'postitive', 'argue', 'prevent', 'justice', 'legally'];
     let negativeWords = ['radical', 'consequences', 'lesson', 'danger', 'not', 'however', 'but', 'failure', 'problem', 'negative'];
 
+    let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
+
     xpos = 300;
     ypos = 100;
 
@@ -291,6 +293,11 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_active);
                     }
+
+                     pixlength = d3.select(this).node().getComputedTextLength();
+
+                     d.highlight.attr("width", pixlength)
+
                 }).on("mouseout", function(d) {
                     d3.select(this).text(d.text);
                     d3.select(this).attr("fill", sentence_color_normal);
@@ -298,13 +305,32 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
                     for (let e of d.outgoing) {
                         e.attr("stroke", link_color_normal);
                     }
+
+                    pixlength = d3.select(this).node().getComputedTextLength();
+
+                    d.highlight.attr("width", pixlength)
+                
                 })
+            let current_heat = 0;
+
+            if (sent.heat != undefined) { current_heat = sent.heat}
+
+            pixlength = elem.node().getComputedTextLength();
+
+            let highlight = svg.append('rect')
+                            .attr("x", xpos)
+                            .attr("y", ypos-15)
+                            .attr("width", pixlength)
+                            .attr("height", 16)
+                            .attr("fill", function(d){return colorScale(current_heat)})
+                            .moveToBack();
             elem.data([{
                 "incoming": [],
                 "outgoing": [],
                 "text": sent.words,
                 "text_with_pos": `(${par.index},${sent.index}) ${sent.words}`,
                 "annotation_svg": annotation_svg_str,
+                "highlight": highlight
             }]);
             pos[par.index][sent.index] = [xpos, ypos - textheight / 4];
             sentences[par.index][sent.index] = elem;
