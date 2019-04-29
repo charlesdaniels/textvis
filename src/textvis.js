@@ -159,9 +159,9 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     // glitches with mouseover under Firefox
     let svg = container.append('div').append('svg')
         .attr("id", "textvis_svg")
-        .style("overflow", "visible")
-        .attr("width", 2000)
-        .attr("height", 5000);
+        .style("overflow", "scroll")
+        .attr("width", 2500)
+        .attr("height", 5500);
 
     let annotation_container = container.append('div')
         .attr("id", "annotation_container")
@@ -245,8 +245,6 @@ function instantiate_vis(container_id, download_btn_id, paragraphs, relations) {
     let positivity = {};
     let positiveWords = ['should', 'important', 'may', 'best', 'would', 'deterent', 'realistic', 'postitive', 'argue', 'prevent', 'justice', 'legally'];
     let negativeWords = ['radical', 'consequences', 'lesson', 'danger', 'not', 'however', 'but', 'failure', 'problem', 'negative'];
-
-    let colorScale = d3.scaleLinear().range(["white", "#AAAAAA"]).domain([0, 1]);
 
     xpos = 300;
     ypos = 100;
